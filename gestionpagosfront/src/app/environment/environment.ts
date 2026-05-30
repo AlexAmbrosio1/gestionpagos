@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl:'https://gestionpagos-api.onrender.com/api',
+    apiUrl:'https://gestionpagos-back.onrender.com',
 }
