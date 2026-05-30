@@ -1,0 +1,576 @@
+<div class="container">
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <div class="top-bar">
+
+        <div>
+
+            <h2>
+
+                Boletas de Pago
+
+            </h2>
+
+            <p>
+
+                Gestión de pagos y gratificaciones
+
+            </p>
+
+        </div>
+
+        
+
+    </div>
+
+    <!-- =========================================
+         FORMULARIO
+    ========================================== -->
+
+    <div class="form-card">
+
+        <h3>
+
+            Generar Nueva Boleta
+
+        </h3>
+
+        <!-- BUSQUEDA -->
+
+        <div class="form-group">
+
+            <label>
+
+                Buscar Empleado por DNI
+
+            </label>
+
+            <div class="busqueda-dni">
+
+                <input
+                type="text"
+                maxlength="8"
+                placeholder="Ingrese DNI"
+                [(ngModel)]="dniBusqueda"
+                name="dni">
+
+                <button
+                type="button"
+                class="btn-buscar"
+                (click)="buscarEmpleadoPorDni()">
+
+                    Buscar
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- =========================================
+             PANEL BOLETA
+        ========================================== -->
+
+        <div
+        class="panel-boleta"
+        *ngIf="contratoSeleccionado">
+
+            <!-- =========================================
+                 PANEL IZQUIERDO
+            ========================================== -->
+
+            <div class="panel-left">
+
+                <!-- EMPLEADO -->
+
+                <div class="empleado-card">
+
+                    <div class="avatar">
+
+                        {{
+                        contratoSeleccionado
+                        .EmpNombres
+                        ?.charAt(0)
+                        }}
+
+                    </div>
+
+                    <div>
+
+                        <h3>
+
+                            {{
+                            contratoSeleccionado
+                            .EmpNombres
+                            }}
+
+                            {{
+                            contratoSeleccionado
+                            .EmpApellidoPaterno
+                            }}
+
+                            {{
+                            contratoSeleccionado
+                            .EmpApellidoMaterno
+                            }}
+
+                        </h3>
+
+                        <span class="estado-activo">
+
+                            Contrato Seleccionado
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <!-- DETALLES -->
+
+                <div class="contrato-grid">
+
+                    <div class="dato-mini">
+
+                        <span>
+
+                            Código
+
+                        </span>
+
+                        <strong>
+
+                            #{{ contratoSeleccionado.ConCodigo }}
+
+                        </strong>
+
+                    </div>
+
+                    <div class="dato-mini">
+
+                        <span>
+
+                            Área
+
+                        </span>
+
+                        <strong>
+
+                            {{
+                            contratoSeleccionado
+                            .AreNombreArea
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                    <div class="dato-mini">
+
+                        <span>
+
+                            Modalidad
+
+                        </span>
+
+                        <strong>
+
+                            {{
+                            contratoSeleccionado
+                            .ConModalidad
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                    <div class="dato-mini">
+
+                        <span>
+
+                            Jornada
+
+                        </span>
+
+                        <strong>
+
+                            {{
+                            contratoSeleccionado
+                            .ConJornada
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                    <div class="dato-mini">
+
+                        <span>
+
+                            Fecha Inicio
+
+                        </span>
+
+                        <strong>
+
+                            {{
+                            contratoSeleccionado
+                            .ConFechaInicio
+                            | date:'dd/MM/yyyy'
+                            }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- =========================================
+                 PANEL DERECHO
+            ========================================== -->
+
+            <div class="panel-right">
+
+                <h3>
+
+                    Generar Boleta
+
+                </h3>
+
+                <!-- FECHA -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Fecha Generación
+
+                    </label>
+
+                    <input
+                    type="date"
+                    [(ngModel)]="boleta.BolFechaGeneracion"
+                    name="fecha"
+                    (change)="calcularGratificacion()">
+
+                </div>
+
+                <!-- RESUMEN -->
+
+                <div class="resumen-pago">
+
+                    <div class="card-resumen">
+
+                        <span>
+
+                            Salario
+
+                        </span>
+
+                        <h4>
+
+                            S/
+                            {{
+                            boleta.BolSalarioUsado
+                            }}
+
+                        </h4>
+
+                    </div>
+
+                    <div class="card-resumen">
+
+                        <span>
+
+                            Gratificación
+
+                        </span>
+
+                        <h4>
+
+                            S/
+                            {{
+                            boleta.BolMontoGratificacion + '.00'
+                            }}
+
+                        </h4>
+
+                    </div>
+
+                    <div class="card-resumen">
+
+                        <span>
+
+                            Total Pago
+
+                        </span>
+
+                        <h4>
+
+                            S/
+                            {{
+                            boleta.BolTotalPago +'.00'
+                            }}
+
+                        </h4>
+
+                    </div>
+
+                </div>
+
+                <!-- BOTON -->
+
+                <div class="form-footer">
+
+                    <button
+                    class="btn-generar"
+                    (click)="guardarBoleta()">
+
+                        Generar Boleta
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================================
+         TABLA
+    ========================================== -->
+
+    <div class="tabla-card">
+
+        <table>
+
+            <thead>
+    <tr>
+        <th>ID</th>
+        <th>Empleado</th>
+        <th>Área</th>
+        <th>Salario</th>
+        <th>Gratificación</th>
+        <th>Total</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acciones</th> 
+        <th>Exportar</th>
+    </tr>
+</thead>
+<tbody>
+    <tr *ngFor="let bol of boletas">
+        <td>{{ bol.BolCodigo }}</td>
+        <td>
+            <div class="empleado-info">
+                <div class="avatar-mini">{{ bol.EmpNombres?.charAt(0) }}</div>
+                <strong>{{ bol.EmpNombres }} {{ bol.EmpApellidoPaterno }}</strong>
+            </div>
+        </td>
+        <td>{{ bol.AreNombreArea }}</td>
+        <td class="salario">S/{{ bol.BolSalarioUsado }}</td>
+        <td class="gratificacion">S/{{ bol.BolMontoGratificacion }}</td>
+        <td class="total">S/{{ bol.BolTotalPago }}</td>
+        <td>{{ bol.BolFechaGeneracion | date:'dd/MM/yyyy' }}</td>
+        <td><span class="estado">{{ bol.BolEstado }}</span></td>
+        <td>
+            
+            <button class="btn-eliminar" (click)="eliminarBoleta(bol.BolCodigo!)">
+                🗑
+            </button>
+        </td>
+        <td>
+            <button class="btn-excel" (click)="exportarBoletaExcel(bol)">
+                📗
+            </button>
+        </td>
+    </tr>
+</tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- =========================================
+     MODAL CONTRATOS
+========================================== -->
+
+<div
+class="modal-overlay"
+*ngIf="mostrarModalContratos">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <h3>
+
+                Seleccionar Contrato
+
+            </h3>
+
+            <button
+            class="btn-cerrar"
+            (click)="cerrarModalContratos()">
+
+                ✕
+
+            </button>
+
+        </div>
+
+        <div class="lista-contratos">
+
+            <div
+            class="card-contrato"
+            *ngFor="
+            let contrato of contratosEmpleado"
+            (click)="seleccionarContrato(contrato)">
+
+                <div class="card-top">
+
+                    <h4>
+
+                        Contrato
+                        #{{ contrato.ConCodigo }}
+
+                    </h4>
+
+                    <span class="estado-modal">
+
+                        {{
+                        contrato.ConEstado
+                        }}
+
+                    </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <p>
+
+                        <strong>
+                            Área:
+                        </strong>
+
+                        {{
+                        contrato.AreNombreArea
+                        }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>
+                            Modalidad:
+                        </strong>
+
+                        {{
+                        contrato.ConModalidad
+                        }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>
+                            Jornada:
+                        </strong>
+
+                        {{
+                        contrato.ConJornada
+                        }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>
+                            Salario:
+                        </strong>
+
+                        S/
+                        {{
+                        contrato.ConSalarioActual
+                        }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>
+                            Inicio:
+                        </strong>
+
+                        {{
+                        contrato.ConFechaInicio
+                        | date:'dd/MM/yyyy'
+                        }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     MODAL CONFIRMACIÓN CRUD
+========================================== -->
+
+<div class="modal-overlay" *ngIf="mostrarModalConfirmacion">
+
+    <div class="modal-content" style="max-width:450px; text-align:center;">
+
+        <h3 style="margin-bottom:15px;">
+            {{ tituloConfirmacion }}
+        </h3>
+
+        <p style="margin-bottom:25px; color:#64748b;">
+            {{ mensajeConfirmacion }}
+        </p>
+
+        <div class="modal-actions">
+
+    <button class="btn-confirm" (click)="confirmarAccion()">
+        Sí, confirmar
+    </button>
+
+    <button class="btn-cancel" (click)="cancelarAccion()">
+        Cancelar
+    </button>
+
+</div>
+
+    </div>
+
+</div>
+
+
+<div class="modal-overlay" *ngIf="mostrarModalDniError">
+  <div class="modal-content" style="max-width:450px; text-align:center;">
+    <h3 style="margin-bottom:15px;">{{ tituloModalDniError }}</h3>
+    <p style="margin-bottom:25px; color:#64748b;">{{ mensajeModalDniError }}</p>
+    <div style="display:flex; gap:10px; justify-content:center;">
+      <button class="btn-excel" (click)="cerrarModalDniError()">
+        Aceptar
+      </button>
+    </div>
+  </div>
+</div>

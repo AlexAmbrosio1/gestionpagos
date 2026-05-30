@@ -1,0 +1,687 @@
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="top-bar">
+
+        <div>
+
+            <h2>
+
+                Lista de Contratos
+
+            </h2>
+
+            <p>
+
+                Gestión contractual de empleados
+
+            </p>
+
+        </div>
+
+        <button
+        class="btn-agregar"
+        (click)="abrirModal()">
+
+            + Nuevo Contrato
+
+        </button>
+
+    </div>
+
+    <!-- LOADER -->
+
+    <div
+    class="loader-tabla"
+    *ngIf="loadingTabla">
+
+        <div class="spinner"></div>
+
+        <p>
+
+            Cargando contratos...
+
+        </p>
+
+    </div>
+
+    <!-- TABLA -->
+
+    <div
+    class="tabla-card"
+    *ngIf="!loadingTabla">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Empleado</th>
+
+                    <th>Área</th>
+
+                    <th>Salario</th>
+
+                    <th>Antigüedad</th>
+
+                    <th>Estado</th>
+
+                    <th>Acciones</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr
+                *ngFor="
+                let contrato of contratos">
+
+                    <!-- ID -->
+
+                    <td>
+
+                        {{ contrato.ConCodigo }}
+
+                    </td>
+
+                    <!-- EMPLEADO -->
+
+                    <td>
+
+                        <div class="empleado-info">
+
+                            <div class="avatar-mini">
+
+                                {{
+                                contrato.EmpNombres
+                                ?.charAt(0)
+                                }}
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+
+                                    {{
+                                    contrato.EmpNombres
+                                    }}
+
+                                    {{
+                                    contrato.EmpApellidoPaterno
+                                    }}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                    <!-- AREA -->
+
+                    <td>
+
+                        {{ contrato.AreNombreArea }}
+
+                    </td>
+
+                    <!-- SALARIO -->
+
+                    <td class="salario">
+
+                        S/
+                        {{ contrato.ConSalarioActual }}
+
+                    </td>
+
+                    <!-- ANTIGUEDAD -->
+
+                    <td>
+
+                        <span class="badge-antiguedad">
+
+                            {{
+                            contrato.AntiguedadAnios
+                            }}
+                            años
+
+                            {{
+                            contrato.AntiguedadMeses
+                            }}
+                            meses
+
+                        </span>
+
+                    </td>
+
+                    <!-- ESTADO -->
+
+                    <td>
+
+                        <span
+                        class="estado"
+                        [ngClass]="{
+
+                            'activo':
+                            contrato.ConEstado ===
+                            'Activo',
+
+                            'finalizado':
+                            contrato.ConEstado ===
+                            'Finalizado'
+
+                        }">
+
+                            {{ contrato.ConEstado }}
+
+                        </span>
+
+                    </td>
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="acciones">
+
+                            <button
+                            class="btn-editar"
+                            (click)="editarContrato(
+                                contrato
+                            )">
+
+                                Editar
+
+                            </button>
+
+                            <button
+                            class="btn-eliminar"
+                            (click)="eliminarContrato(
+                                contrato.ConCodigo!
+                            )">
+
+                                Eliminar
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- MODAL PRINCIPAL -->
+
+<div
+class="modal-overlay"
+*ngIf="mostrarModal">
+
+    <div class="modal-content">
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3>
+
+                    {{
+                    editando
+                    ? 'Editar Contrato'
+                    : 'Nuevo Contrato'
+                    }}
+
+                </h3>
+
+                <p>
+
+                    Complete la información contractual
+
+                </p>
+
+            </div>
+
+            <button
+            class="cerrar"
+            (click)="cerrarModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <!-- FORM -->
+
+        <div class="formulario">
+
+            <div class="form-group">
+
+  <label>Modalidad</label>
+
+  <select
+    [(ngModel)]="contrato.ConModalidad"
+    [class.input-error]="errores.modalidad">
+
+    <option value="">Seleccione modalidad</option>
+
+    <option value="Plazo Determinado">
+      Plazo Determinado
+    </option>
+
+    <option value="Contrato Tiempo Parcial">
+      Contrato Tiempo Parcial
+    </option>
+
+  </select>
+
+  <small class="error-text" *ngIf="errores.modalidad">
+    {{ errores.modalidad }}
+  </small>
+
+</div>
+
+            <div class="form-group">
+
+  <label>Jornada</label>
+
+  <select
+    [(ngModel)]="contrato.ConJornada"
+    [class.input-error]="errores.jornada">
+
+    <option value="">Seleccione jornada</option>
+
+    <option value="Tiempo Completo">
+      Tiempo Completo
+    </option>
+
+    <option value="Part Time">
+      Part Time
+    </option>
+
+  </select>
+
+  <small class="error-text" *ngIf="errores.jornada">
+    {{ errores.jornada }}</small>
+
+</div>
+
+            <!-- FECHA INICIO -->
+
+            <div class="form-group">
+
+                <label>
+
+                    Fecha Inicio
+
+                </label>
+
+                <input
+                type="date"
+                [(ngModel)]="contrato.ConFechaInicio"
+                [class.input-error]="errores.fechaInicio">
+
+                <small
+                class="error-text"
+                *ngIf="errores.fechaInicio">
+
+                    {{ errores.fechaInicio }}
+
+                </small>
+
+            </div>
+
+            <!-- FECHA FIN -->
+
+            <div class="form-group">
+
+                <label>
+
+                    Fecha Fin
+
+                </label>
+
+                <input
+                type="date"
+                [(ngModel)]="contrato.ConFechaFin"
+                [class.input-error]="errores.fechaFin">
+
+                <small
+                class="error-text"
+                *ngIf="errores.fechaFin">
+
+                    {{ errores.fechaFin }}
+
+                </small>
+
+            </div>
+
+            <!-- DNI -->
+
+            <div class="form-group">
+
+                <label>
+
+                    DNI Empleado
+
+                </label>
+
+                <input
+                type="text"
+                maxlength="8"
+                placeholder="Ingrese DNI"
+                [(ngModel)]="dniBusqueda"
+                (input)="buscarEmpleadoPorDni()"
+                [readonly]="editando"
+                [class.input-error]="errores.empleado">
+
+                <small
+                class="error-text"
+                *ngIf="errores.empleado">
+
+                    {{ errores.empleado }}
+
+                </small>
+
+            </div>
+
+            <!-- EMPLEADO -->
+
+            <div
+            class="form-group empleado-encontrado"
+            *ngIf="empleadoSeleccionado">
+
+                <label>
+
+                    Empleado Encontrado
+
+                </label>
+
+                <div class="empleado-box">
+
+                    <strong>
+
+                        {{
+                        empleadoSeleccionado.EmpNombres
+                        }}
+
+                        {{
+                        empleadoSeleccionado.EmpApellidoPaterno
+                        }}
+
+                    </strong>
+
+                    <span>
+
+                        DNI:
+                        {{
+                        empleadoSeleccionado.EmpDni
+                        }}
+
+                    </span>
+
+                </div>
+
+            </div>
+
+            <!-- AREA -->
+
+            <div class="form-group">
+
+                <label>
+
+                    Área
+
+                </label>
+
+                <select
+                [(ngModel)]="contrato.Area_AreCodigo"
+                (change)="seleccionarArea()"
+                [class.input-error]="errores.area">
+
+                    <option [ngValue]="0">
+
+                        Seleccione área
+
+                    </option>
+
+                    <option
+                    *ngFor="
+                    let area of areas"
+                    [ngValue]="area.AreCodigo">
+
+                        {{ area.AreNombreArea }}
+
+                    </option>
+
+                </select>
+
+                <small
+                class="error-text"
+                *ngIf="errores.area">
+
+                    {{ errores.area }}
+
+                </small>
+
+            </div>
+
+            <!-- SALARIO -->
+
+            <div class="form-group">
+
+                <label>
+
+                    Salario
+
+                </label>
+
+                <input
+                type="number"
+                [(ngModel)]="
+                contrato.ConSalarioActual"
+                readonly>
+
+            </div>
+
+            <!-- ESTADO -->
+
+            <div class="form-group">
+
+  <label>Estado</label>
+
+  <select
+    [(ngModel)]="contrato.ConEstado"
+    [class.input-error]="errores.estado">
+
+    <option value="">Seleccione estado</option>
+
+    <option value="Activo">Activo</option>
+
+    <option value="Inactivo">Inactivo</option>
+
+  </select>
+
+  <small class="error-text" *ngIf="errores.estado">
+    {{ errores.estado }}
+  </small>
+
+</div>
+
+        </div>
+
+        <!-- FOOTER -->
+
+        <div class="modal-footer">
+
+            <button
+            class="btn-cancelar"
+            (click)="cerrarModal()">
+
+                Cancelar
+
+            </button>
+
+            <button
+            class="btn-guardar"
+            (click)="guardarContrato()"
+            [disabled]="loading">
+
+                <span *ngIf="!loading">
+
+                    {{
+                    editando
+                    ? 'Actualizar Contrato'
+                    : 'Guardar Contrato'
+                    }}
+
+                </span>
+
+                <span *ngIf="loading">
+
+                    Guardando...
+
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL CONFIRMACION -->
+
+<div
+class="modal-confirmacion-overlay"
+*ngIf="mostrarConfirmacion">
+
+    <div class="modal-confirmacion">
+
+      
+
+        <h3>
+
+            Confirmar actualización
+
+        </h3>
+
+        <p class="texto-confirmacion">
+
+            ¿Desea actualizar la información del contrato?
+
+        </p>
+
+        <div class="acciones-confirmacion">
+
+            <button
+            type="button"
+            class="btn-cancelar-modal"
+            (click)="cancelarConfirmacion()">
+
+                Cancelar
+
+            </button>
+
+            <button
+            type="button"
+            class="btn-confirmar-modal"
+            (click)="confirmarActualizacion()"
+            [disabled]="loading">
+
+                <span *ngIf="!loading">
+
+                    Sí, Actualizar
+
+                </span>
+
+                <span *ngIf="loading">
+
+                    Actualizando...
+
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL ELIMINAR -->
+
+<div
+class="modal-confirmacion-overlay"
+*ngIf="mostrarConfirmacionEliminar">
+
+    <div class="modal-confirmacion">
+
+        
+
+        <h3>
+
+            Eliminar contrato
+
+        </h3>
+
+        <p class="texto-confirmacion">
+
+            ¿Desea eliminar este contrato?
+
+        </p>
+
+        <div class="acciones-confirmacion">
+
+            <button
+            class="btn-cancelar-modal"
+            (click)="cancelarEliminar()">
+
+                Cancelar
+
+            </button>
+
+            <button
+            class="btn-confirmar-eliminar"
+            (click)="confirmarEliminar()"
+            [disabled]="loading">
+
+                <span *ngIf="!loading">
+
+                    Eliminar
+
+                </span>
+
+                <span *ngIf="loading">
+
+                    Eliminando...
+
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+

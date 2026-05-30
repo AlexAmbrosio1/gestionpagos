@@ -1,0 +1,248 @@
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="top-bar">
+
+    <div>
+      <h2>Usuarios</h2>
+      <p>Gestión de accesos del sistema</p>
+    </div>
+
+    <button class="btn-agregar" (click)="abrirModal()">
+      + Nuevo Usuario
+    </button>
+
+  </div>
+
+  <!-- TABLA -->
+  <div class="tabla-card">
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuario</th>
+          <th>Empleado</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let u of usuarios">
+
+          <td>{{ u.UsuCodigo }}</td>
+          <td>{{ u.UsuUsuario }}</td>
+          <td>{{ u.EmpNombres }} {{ u.EmpApellidoPaterno }}</td>
+          <td>{{ u.RolNombre }}</td>
+
+          <td>
+            <span class="estado"
+              [ngClass]="u.UsuEstado === 'Activo' ? 'activo' : 'inactivo'">
+              {{ u.UsuEstado }}
+            </span>
+          </td>
+
+          <td>
+            <button class="btn-editar" (click)="editarUsuario(u)">
+              Editar
+            </button>
+
+            <button class="btn-eliminar" (click)="eliminarUsuario(u.UsuCodigo)">
+              Eliminar
+            </button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<!-- ================= MODAL CREAR / EDITAR ================= -->
+<div class="modal-overlay" *ngIf="mostrarModal">
+
+  <div class="modal-content">
+
+    <h3>
+      {{ editando ? 'Editar Usuario' : 'Nuevo Usuario' }}
+    </h3>
+
+    <div class="formulario">
+
+      <!-- USUARIO -->
+      <input
+        placeholder="Usuario"
+        [(ngModel)]="usuario.UsuUsuario">
+
+      <!-- PASSWORD -->
+      <div class="password-wrapper">
+
+  <input
+    [type]="mostrarPassword ? 'text' : 'password'"
+    placeholder="Contraseña"
+    [(ngModel)]="usuario.UsuPassword"
+    autocomplete="new-password"
+    name="UsuPassword"
+    spellcheck="false"
+  >
+
+  <button type="button"
+          class="btn-ojo"
+          (click)="mostrarPassword = !mostrarPassword">
+    👁
+  </button>
+
+</div>
+
+      <!-- DNI -->
+     <input
+  maxlength="8"
+  placeholder="Buscar DNI"
+  [(ngModel)]="dniBusqueda"
+  (keypress)="soloNumeros($event)"
+  (input)="onDniInput($event)"
+  inputmode="numeric"
+  autocomplete="off"
+/>
+<div *ngIf="dniBusqueda.length > 0 && dniBusqueda.length < 8"
+     style="color: #dc2626; font-size: 12px;">
+  DNI debe tener 8 dígitos
+</div>
+
+<div *ngIf="dniBusqueda.length === 8 && !empleadoSeleccionado"
+     style="color: #dc2626; font-size: 12px;">
+  No existe empleado con este DNI
+</div>
+      <!-- EMPLEADO SELECCIONADO -->
+      <div *ngIf="empleadoSeleccionado" class="empleado-box">
+        <strong>
+          {{ empleadoSeleccionado.EmpNombres }}
+          {{ empleadoSeleccionado.EmpApellidoPaterno }}
+        </strong>
+      </div>
+
+      <!-- ROL -->
+      <select [(ngModel)]="usuario.Rol_RolCodigo">
+  <option [ngValue]="0">Seleccione rol</option>
+
+  <option *ngFor="let r of roles" [ngValue]="r.RolCodigo">
+    {{ r.RolNombre }}
+  </option>
+</select>
+
+      <!-- ESTADO -->
+      <select [(ngModel)]="usuario.UsuEstado">
+        <option value="Activo">Activo</option>
+        <option value="Inactivo">Inactivo</option>
+      </select>
+
+    </div>
+
+    <!-- FOOTER MODAL -->
+    <div class="modal-footer">
+
+      <button (click)="cerrarModal()" [disabled]="loading">
+        Cancelar
+      </button>
+
+      <button
+        (click)="editando ? actualizarUsuario() : guardarUsuario()"
+        [disabled]="loading">
+
+        <span *ngIf="!loading">
+          {{ editando ? 'Actualizar' : 'Guardar' }}
+        </span>
+
+        <span *ngIf="loading">
+          Procesando...
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ================= MODAL CONFIRMAR ELIMINACIÓN ================= -->
+<div class="modal-confirmacion-overlay" *ngIf="mostrarConfirmacionEliminar">
+
+  <div class="modal-confirmacion">
+
+    <h3>¿Eliminar usuario?</h3>
+
+    <p>Esta acción no se puede deshacer</p>
+
+    <button (click)="cancelarEliminar()">
+      Cancelar
+    </button>
+
+    <button class="btn-eliminar" (click)="confirmarEliminar()">
+      Sí, eliminar
+    </button>
+
+  </div>
+
+</div>
+
+<!-- ================= MODAL CONFIRMAR ACTUALIZACIÓN ================= -->
+<div class="modal-confirmacion-overlay" *ngIf="mostrarConfirmacion">
+
+  <div class="modal-confirmacion">
+
+    <h3>Confirmar actualización</h3>
+
+    <p>¿Deseas guardar los cambios?</p>
+
+    <button (click)="cancelarConfirmacion()">
+      Cancelar
+    </button>
+
+    <button (click)="confirmarActualizacion()">
+      Sí
+    </button>
+
+  </div>
+
+</div>
+
+<!-- ================= MENSAJE ================= -->
+<div class="modal-mensaje" *ngIf="mostrarMensaje">
+
+  <div class="mensaje-box" [ngClass]="tipoMensaje">
+
+    <h3>{{ tituloMensaje }}</h3>
+    <p>{{ textoMensaje }}</p>
+
+    <button (click)="cerrarMensaje()">
+      OK
+    </button>
+
+  </div>
+
+</div>
+
+<div class="modal-confirmacion-overlay" *ngIf="mostrarErrorModal">
+
+  <div class="modal-confirmacion">
+
+    <h3 style="color:#dc2626;">Error</h3>
+
+    <p>{{ mensajeErrorModal }}</p>
+
+    <button (click)="cerrarError()" class="btn-eliminar">
+      Cerrar
+    </button>
+
+  </div>
+
+</div>

@@ -1,0 +1,631 @@
+
+<div class="container">
+
+    <!-- HEADER -->
+
+    <div class="top-bar">
+
+        <div>
+
+            <h2>
+
+                Lista de Empleados
+
+            </h2>
+
+            <p>
+
+                Gestión de empleados registrados
+
+            </p>
+
+        </div>
+
+        <button
+        class="btn-agregar"
+        (click)="abrirModal()">
+
+            + Nuevo Empleado
+
+        </button>
+
+    </div>
+
+    <!-- TABLA -->
+
+    <div class="tabla-card">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Empleado</th>
+
+                    <th>DNI</th>
+
+                    <th>Correo</th>
+
+                    <th>Edad</th>
+
+                    <th>Género</th>
+
+                    <th>Acciones</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr
+                *ngFor="
+                let emp of empleados">
+
+                    <!-- ID -->
+
+                    <td>
+
+                        {{ emp.EmpCodigo }}
+
+                    </td>
+
+                    <!-- EMPLEADO -->
+
+                    <td>
+
+                        <div class="empleado-info">
+
+                            <div class="avatar-mini">
+
+                                {{
+                                emp.EmpNombres
+                                .charAt(0)
+                                }}
+
+                            </div>
+
+                            <div>
+
+                                <strong>
+
+                                    {{
+                                    emp.EmpNombres
+                                    }}
+
+                                    {{
+                                    emp.EmpApellidoPaterno
+                                    }}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                    <!-- DNI -->
+
+                    <td>
+
+                        {{ emp.EmpDni }}
+
+                    </td>
+
+                    <!-- CORREO -->
+
+                    <td>
+
+                        {{ emp.EmpCorreo }}
+
+                    </td>
+
+                    <!-- EDAD -->
+
+                    <td>
+
+                        <span class="badge-edad">
+
+                            {{ emp.edad }} años
+
+                        </span>
+
+                    </td>
+
+                    <!-- GENERO -->
+
+                    <td>
+
+                        <span
+                        class="estado"
+                        [ngClass]="{
+
+                            'masculino':
+                            emp.EmpGenero ===
+                            'Masculino',
+
+                            'femenino':
+                            emp.EmpGenero ===
+                            'Femenino'
+
+                        }">
+
+                            {{ emp.EmpGenero }}
+
+                        </span>
+
+                    </td>
+
+                    <!-- ACCIONES -->
+
+                    <td>
+
+                        <div class="acciones">
+
+                            <button
+                            class="btn-editar"
+                            (click)="editarEmpleado(emp)">
+
+                                Editar
+
+                            </button>
+
+                            <button
+                            class="btn-eliminar"
+                            (click)="eliminarEmpleado(
+                                emp.EmpCodigo || 0
+                            )">
+
+                                Eliminar
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- MODAL -->
+
+<div
+class="modal-overlay"
+*ngIf="mostrarModal">
+
+    <div class="modal-content">
+
+        <!-- HEADER -->
+
+        <div class="modal-header">
+
+            <div>
+
+                <h3>
+
+                    {{
+                    editando
+                    ? 'Editar Empleado'
+                    : 'Nuevo Empleado'
+                    }}
+
+                </h3>
+
+                <p>
+
+                    Complete la información del empleado
+
+                </p>
+
+            </div>
+
+            <button
+            class="cerrar"
+            (click)="cerrarModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+        <!-- FORM -->
+
+        <form
+  #empleadoForm="ngForm"
+  (ngSubmit)="guardarEmpleado(empleadoForm)">
+
+            <div class="formulario">
+
+                <!-- DNI -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        DNI
+
+                    </label>
+
+                    <input
+                    type="text"
+                    placeholder="Ingrese DNI"
+                    [(ngModel)]="empleado.EmpDni"
+                    name="dni"
+                    required
+                    maxlength="8"
+                    minlength="8"
+                    pattern="[0-9]{8}"
+                    #dni="ngModel"
+                    (keypress)="soloNumeros($event)">
+
+                    <small
+                    class="error"
+                    *ngIf="
+                    dni.invalid &&
+                    dni.touched
+                    ">
+
+                        El DNI debe tener 8 números
+
+                    </small>
+
+                </div>
+
+                <!-- PATERNO -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Apellido Paterno
+
+                    </label>
+
+                    <input
+                    type="text"
+                    placeholder="Apellido paterno"
+                    [(ngModel)]="
+                    empleado.EmpApellidoPaterno"
+                    name="paterno"
+                    required
+                    pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+"
+                    #paterno="ngModel"
+                    (keypress)="soloLetras($event)">
+
+                    <small
+                    class="error"
+                    *ngIf="
+                    paterno.invalid &&
+                    paterno.touched
+                    ">
+
+                        Solo letras permitidas
+
+                    </small>
+
+                </div>
+
+                <!-- MATERNO -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Apellido Materno
+
+                    </label>
+
+                    <input
+                    type="text"
+                    placeholder="Apellido materno"
+                    [(ngModel)]="
+                    empleado.EmpApellidoMaterno"
+                    name="materno"
+                    required
+                    pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+"
+                    #materno="ngModel"
+                    (keypress)="soloLetras($event)">
+
+                    <small
+                    class="error"
+                    *ngIf="
+                    materno.invalid &&
+                    materno.touched
+                    ">
+
+                        Solo letras permitidas
+
+                    </small>
+
+                </div>
+
+                <!-- NOMBRES -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Nombres
+
+                    </label>
+
+                    <input
+                    type="text"
+                    placeholder="Ingrese nombres"
+                    [(ngModel)]="
+                    empleado.EmpNombres"
+                    name="nombres"
+                    required
+                    pattern="[A-Za-zÁÉÍÓÚáéíóúñÑ ]+"
+                    #nombres="ngModel"
+                    (keypress)="soloLetras($event)">
+
+                    <small
+                    class="error"
+                    *ngIf="
+                    nombres.invalid &&
+                    nombres.touched
+                    ">
+
+                        Solo letras permitidas
+
+                    </small>
+
+                </div>
+
+                <!-- CORREO -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Correo
+
+                    </label>
+
+                    <input
+                    type="email"
+                    placeholder="correo@gmail.com"
+                    [(ngModel)]="
+                    empleado.EmpCorreo"
+                    name="correo"
+                    required
+                    email
+                    #correo="ngModel">
+
+                    <small
+                    class="error"
+                    *ngIf="
+                    correo.invalid &&
+                    correo.touched
+                    ">
+
+                        Correo inválido
+
+                    </small>
+
+                </div>
+
+                <!-- FECHA -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Fecha Nacimiento
+
+                    </label>
+
+                    <input
+                    type="date"
+                    [(ngModel)]="
+                    empleado.EmpFechaNacimiento"
+                    name="fecha"
+                    required
+                    #fecha="ngModel">
+
+                    <small
+                    class="error"
+                    *ngIf="
+                    fecha.invalid &&
+                    fecha.touched
+                    ">
+
+                        Fecha obligatoria
+
+                    </small>
+
+                </div>
+
+                <!-- GENERO -->
+
+                <div class="form-group">
+
+                    <label>
+
+                        Género
+
+                    </label>
+
+                    <select
+                    [(ngModel)]="
+                    empleado.EmpGenero"
+                    name="genero"
+                    required
+                    #genero="ngModel">
+
+                        <option value="">
+
+                            Seleccione género
+
+                        </option>
+
+                        <option value="Masculino">
+
+                            Masculino
+
+                        </option>
+
+                        <option value="Femenino">
+
+                            Femenino
+
+                        </option>
+
+                    </select>
+
+                    <small
+                    class="error"
+                    *ngIf="
+                    genero.invalid &&
+                    genero.touched
+                    ">
+
+                        Seleccione un género
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <!-- FOOTER -->
+
+            <div class="modal-footer">
+
+                <button
+                type="button"
+                class="btn-cancelar"
+                (click)="cerrarModal()">
+
+                    Cancelar
+
+                </button>
+
+                <button
+                type="submit"
+                class="btn-guardar"
+                >
+
+                    {{
+                    editando
+                    ? 'Actualizar Empleado'
+                    : 'Guardar Empleado'
+                    }}
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+
+<!-- MODAL MENSAJE -->
+<div class="modal-overlay" *ngIf="mostrarMensajeModal">
+
+  <div class="modal-mensaje">
+
+    <h3 [ngClass]="tipoMensaje">
+
+      {{
+        tipoMensaje === 'exito'
+        ? '✔ Éxito'
+        : '⚠ Error'
+      }}
+
+    </h3>
+
+    <p>{{ mensajeModal }}</p>
+
+    <button (click)="cerrarMensajeModal()">
+      Aceptar
+    </button>
+
+  </div>
+
+</div>
+
+<!-- MODAL CONFIRMAR ELIMINACIÓN -->
+<div class="modal-overlay" *ngIf="mostrarConfirmarEliminar">
+
+  <div class="modal-confirm">
+
+    <h3>
+
+            Eliminar empleado
+
+        </h3>
+
+        <p class="texto-confirmacion">
+
+            ¿Desea eliminar este empleado?
+
+        </p>
+
+    <div class="acciones-modal">
+
+      <button class="btn-cancelar"
+              (click)="mostrarConfirmarEliminar = false">
+
+        Cancelar
+
+      </button>
+
+      <button class="btn-eliminar"
+              (click)="confirmarEliminar()">
+
+        Eliminar
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- MODAL CONFIRMAR ACTUALIZACIÓN -->
+<div class="modal-overlay" *ngIf="mostrarConfirmarActualizar">
+
+  <div class="modal-confirm">
+
+    <h3>Actualizar empleado</h3>
+
+    <p class="texto-confirmacion">
+      ¿Desea guardar los cambios de este empleado?
+    </p>
+
+    <div class="acciones-modal">
+
+      <button class="btn-cancelar"
+              (click)="mostrarConfirmarActualizar = false">
+        Cancelar
+      </button>
+
+      <button class="btn-editar"
+              (click)="confirmarActualizar()">
+        Actualizar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

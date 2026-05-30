@@ -1,0 +1,44 @@
+areaController.js
+
+contrato depende de área
+sirve para probar toda tu arquitectura
+
+empleadoController.js
+
+validarás DNI
+validarás correo
+calcularás edad
+controlarás empleados duplicados
+
+contratoController.js
+
+conecta empleado + área
+congela salario histórico
+controla fechas
+controla estado laboral
+sirve para generar boletas
+
+boletaPagoController.js
+
+cálculo total
+gratificación automática
+historial pagos
+salario usado
+boletas por empleado
+boletas por contrato
+
+usuarioController.js
+
+login
+roles
+administrador
+acceso al sistema
+seguridad básica
+
+npm install bcryptjs
+
+npm install jsonwebtoken
+
+Cómo usar JWT en Thunder Client
+
+sale error en "libro-list.component.spec" pero compila entonces aplicar npm install --save-dev @types/jasmine

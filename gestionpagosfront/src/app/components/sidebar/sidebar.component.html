@@ -1,0 +1,96 @@
+<div class="sidebar">
+
+  <!-- LOGO -->
+  <div class="logo">
+    EmpleaSoft
+  </div>
+
+  <!-- MENU -->
+  <div class="menu">
+
+    <a routerLink="/dashboard" routerLinkActive="active">
+      Dashboard
+    </a>
+
+    <a *ngIf="esAdmin() || esRRHH()"
+       routerLink="/empleados"
+       routerLinkActive="active">
+      Empleados
+    </a>
+
+    <a *ngIf="esAdmin() || esRRHH()"
+       routerLink="/contratos"
+       routerLinkActive="active">
+      Contratos
+    </a>
+
+    <a *ngIf="esAdmin()"
+       routerLink="/boletas"
+       routerLinkActive="active">
+      Boletas
+    </a>
+
+    <a *ngIf="esAdmin()"
+       routerLink="/areas"
+       routerLinkActive="active">
+      Áreas
+    </a>
+
+    <a *ngIf="esAdmin()"
+       routerLink="/usuarios"
+       routerLinkActive="active">
+      Usuarios
+    </a>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="sidebar-footer">
+
+    <div class="user-info">
+
+      <div class="avatar">
+        {{ usuario?.Empleado?.charAt(0) || 'U' }}
+      </div>
+
+      <div>
+        <strong>{{ usuario?.Empleado || 'Usuario' }}</strong>
+        <br>
+        <small>{{ usuario?.Rol || 'Rol' }}</small>
+      </div>
+
+    </div>
+
+    <button class="btn-logout" (click)="abrirModalLogout()">
+      Cerrar sesión
+    </button>
+
+  </div>
+
+</div>
+
+<!-- 🔥 MODAL GLOBAL (IMPORTANTE: FUERA DEL SIDEBAR BLOQUEO) -->
+<ng-container *ngIf="mostrarModalLogout">
+  <div class="modal-overlay">
+
+    <div class="logout-modal">
+      <h3>¿Cerrar sesión?</h3>
+
+      <p>¿Estás seguro de que deseas salir del sistema?</p>
+
+      <div class="modal-actions">
+
+        <button class="btn-cancel" (click)="cancelarLogout()">
+          Cancelar
+        </button>
+
+        <button class="btn-confirm" (click)="confirmarLogout()">
+          Sí, salir
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+</ng-container>

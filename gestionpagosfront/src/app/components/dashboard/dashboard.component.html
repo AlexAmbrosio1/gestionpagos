@@ -1,0 +1,321 @@
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+
+    <app-sidebar></app-sidebar>
+
+    <!-- CONTENIDO -->
+
+    <div class="dashboard-content">
+
+        <!-- HEADER -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <h1>
+
+                    Dashboard
+
+                </h1>
+
+                <p>
+
+                    Bienvenido {{ usuario?.Empleado }}
+
+                </p>
+
+            </div>
+
+            <div class="usuario-box">
+
+                <div class="avatar">
+
+                    {{
+                    usuario?.Empleado
+                    ?.charAt(0)
+                    }}
+
+                </div>
+
+                <div>
+
+                    <strong>
+
+                        {{ usuario?.Rol }}
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TARJETAS -->
+
+        <div class="cards-grid">
+
+            <!-- EMPLEADOS -->
+
+            <div class="dashboard-card card-primary">
+
+                <div>
+
+                    <span>
+
+                        Empleados
+
+                    </span>
+
+                    <h2>
+
+                        {{ resumen.empleados }}
+
+                    </h2>
+
+                </div>
+
+                <div class="icono">
+
+                    👥
+
+                </div>
+
+            </div>
+
+            <!-- CONTRATOS -->
+
+            <div class="dashboard-card card-success">
+
+                <div>
+
+                    <span>
+
+                        Contratos
+
+                    </span>
+
+                    <h2>
+
+                        {{ resumen.contratos }}
+
+                    </h2>
+
+                </div>
+
+                <div class="icono">
+
+                    📄
+
+                </div>
+
+            </div>
+
+            <!-- BOLETAS -->
+
+            <div class="dashboard-card card-dark">
+
+                <div>
+
+                    <span>
+
+                        Boletas
+
+                    </span>
+
+                    <h2>
+
+                        {{ resumen.boletas }}
+
+                    </h2>
+
+                </div>
+
+                <div class="icono">
+
+                    💰
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- MENU ADMIN -->
+
+        <div
+        *ngIf="
+        usuario?.Rol === 'Administrador'
+        "
+        class="modulos-grid">
+
+            <!-- EMPLEADOS -->
+
+            <div class="modulo-card">
+
+                <div class="modulo-icon blue">
+
+                    👨‍💼
+
+                </div>
+
+                <h3>
+
+                    Empleados
+
+                </h3>
+
+                <p>
+
+                    Gestión de empleados registrados
+
+                </p>
+
+                <button
+                routerLink="/empleados">
+
+                    Ingresar
+
+                </button>
+
+            </div>
+
+            <!-- CONTRATOS -->
+
+            <div class="modulo-card">
+
+                <div class="modulo-icon green">
+
+                    📑
+
+                </div>
+
+                <h3>
+
+                    Contratos
+
+                </h3>
+
+                <p>
+
+                    Gestión contractual y salarial
+
+                </p>
+
+                <button
+                routerLink="/contratos">
+
+                    Ingresar
+
+                </button>
+
+            </div>
+
+            <!-- BOLETAS -->
+
+            <div class="modulo-card">
+
+                <div class="modulo-icon dark">
+
+                    💵
+
+                </div>
+
+                <h3>
+
+                    Boletas
+
+                </h3>
+
+                <p>
+
+                    Pagos y reportes mensuales
+
+                </p>
+
+                <button
+                routerLink="/boletas">
+
+                    Ingresar
+
+                </button>
+
+            </div>
+
+            <!-- AREAS -->
+
+            <div class="modulo-card">
+
+                <div class="modulo-icon orange">
+
+                    🏢
+
+                </div>
+
+                <h3>
+
+                    Áreas
+
+                </h3>
+
+                <p>
+
+                    Configuración de áreas y salarios
+
+                </p>
+
+                <button
+                routerLink="/areas">
+
+                    Ingresar
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- PANEL EMPLEADO -->
+
+        <div
+        *ngIf="
+        usuario?.Rol === 'Empleado'
+        "
+        class="empleado-panel">
+
+            <div class="modulo-card empleado-card">
+
+                <div class="modulo-icon blue">
+
+                    📄
+
+                </div>
+
+                <h3>
+
+                    Mis Boletas
+
+                </h3>
+
+                <p>
+
+                    Consulta y descarga tus boletas
+
+                </p>
+
+                <button
+                routerLink="/boletas">
+
+                    Ver Boletas
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

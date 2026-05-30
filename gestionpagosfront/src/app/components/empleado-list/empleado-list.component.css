@@ -1,0 +1,518 @@
+/* CONTENEDOR */
+
+.container{
+
+    padding:30px;
+    min-height:100vh;
+    background:#f1f5f9;
+
+}
+
+/* HEADER */
+
+.top-bar{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+
+}
+
+.top-bar h2{
+
+    margin:0;
+    font-size:34px;
+    font-weight:700;
+    color:#0f172a;
+
+}
+
+.top-bar p{
+
+    margin-top:6px;
+    color:#64748b;
+
+}
+
+/* BOTON AGREGAR */
+
+.btn-agregar{
+
+    border:none;
+    background:#2563eb;
+    color:white;
+    padding:14px 22px;
+    border-radius:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s ease;
+    box-shadow:0 4px 12px rgba(37,99,235,.25);
+
+}
+
+.btn-agregar:hover{
+
+    background:#1d4ed8;
+    transform:translateY(-2px);
+
+}
+
+/* TABLA */
+
+.tabla-card{
+
+    background:white;
+    border-radius:24px;
+    overflow:hidden;
+    box-shadow:0 4px 14px rgba(0,0,0,.05);
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+/* HEADER TABLA */
+
+thead{
+
+    background:#0f172a;
+    color:white;
+
+}
+
+thead th{
+
+    padding:18px;
+    text-align:left;
+    font-size:14px;
+    font-weight:600;
+
+}
+
+/* BODY TABLA */
+
+tbody td{
+
+    padding:18px;
+    border-bottom:1px solid #e2e8f0;
+    color:#334155;
+
+}
+
+tbody tr{
+
+    transition:.3s ease;
+
+}
+
+tbody tr:hover{
+
+    background:#f8fafc;
+
+}
+
+/* EMPLEADO */
+
+.empleado-info{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+}
+
+.avatar-mini{
+
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#2563eb;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+
+}
+
+/* BADGE GENERO */
+
+.badge-genero{
+
+    padding:8px 14px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:600;
+    background:#dbeafe;
+    color:#2563eb;
+
+}
+
+/* EDAD */
+
+.edad{
+
+    color:#16a34a;
+    font-weight:700;
+
+}
+
+/* ACCIONES */
+
+.acciones{
+
+    display:flex;
+    gap:10px;
+
+}
+
+.btn-editar,
+.btn-eliminar{
+
+    border:none;
+    padding:10px 14px;
+    border-radius:10px;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s ease;
+
+}
+input.ng-invalid.ng-touched {
+  border: 1px solid #dc2626;
+}
+
+input.ng-valid.ng-touched {
+  border: 1px solid #16a34a;
+}
+.btn-editar{
+
+    background:#2563eb;
+
+}
+
+.btn-eliminar{
+
+    background:#dc2626;
+
+}
+
+.btn-editar:hover,
+.btn-eliminar:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* ========================= */
+/* MODAL */
+/* ========================= */
+
+.modal-overlay{
+
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.65);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    z-index:9999;
+
+    backdrop-filter:blur(4px);
+
+}
+
+/* CAJA MODAL */
+
+.modal-content{
+
+    width:850px;
+    max-width:95%;
+
+    background:white;
+
+    border-radius:28px;
+
+    padding:30px;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.15);
+
+    animation:fadeUp .3s ease;
+
+}
+
+/* HEADER MODAL */
+
+.modal-header{
+
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+
+    margin-bottom:25px;
+
+}
+
+.modal-header h3{
+
+    margin:0;
+    font-size:30px;
+    color:#0f172a;
+
+}
+
+.modal-header p{
+
+    margin-top:6px;
+    color:#64748b;
+
+}
+
+/* BOTON CERRAR */
+
+.cerrar{
+
+    border:none;
+    background:none;
+    font-size:32px;
+    color:#64748b;
+    cursor:pointer;
+
+}
+
+/* FORMULARIO */
+
+.formulario{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(240px,1fr));
+
+    gap:20px;
+
+}
+
+/* GRUPO */
+
+.form-group{
+
+    display:flex;
+    flex-direction:column;
+
+}
+
+.form-group label{
+
+    margin-bottom:8px;
+    color:#475569;
+    font-weight:600;
+
+}
+
+/* INPUTS */
+
+.formulario input,
+.formulario select{
+
+    width:100%;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:14px;
+
+    padding:14px;
+
+    outline:none;
+
+    background:white;
+
+    transition:.3s ease;
+
+    font-size:15px;
+
+    box-sizing:border-box;
+
+}
+
+.formulario input:focus,
+.formulario select:focus{
+
+    border-color:#2563eb;
+
+    box-shadow:
+    0 0 0 4px rgba(37,99,235,.15);
+
+}
+
+/* ERRORES */
+
+.error{
+
+    margin-top:6px;
+    color:#dc2626;
+    font-size:13px;
+
+}
+
+/* FOOTER */
+
+.modal-footer{
+
+    display:flex;
+    justify-content:flex-end;
+    gap:14px;
+
+    margin-top:30px;
+
+}
+
+/* BOTONES FOOTER */
+
+.btn-cancelar,
+.btn-guardar{
+
+    border:none;
+
+    padding:14px 22px;
+
+    border-radius:14px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s ease;
+
+}
+
+.btn-cancelar{
+
+    background:#e2e8f0;
+    color:#0f172a;
+
+}
+
+.btn-guardar{
+
+    background:#1d4ed8;
+    color:white;
+
+}
+
+.btn-cancelar:hover,
+.btn-guardar:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* ANIMACION */
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+
+    }
+
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+    .container{
+
+        padding:20px;
+
+    }
+
+    .top-bar{
+
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+
+    }
+
+    .formulario{
+
+        grid-template-columns:1fr;
+
+    }
+
+    table{
+
+        display:block;
+        overflow-x:auto;
+        white-space:nowrap;
+
+    }
+
+}
+/* =========================
+   MODAL MENSAJE
+========================= */
+
+.modal-mensaje,
+.modal-confirm{
+
+  background:white;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  width:350px;
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
+
+}
+
+.modal-mensaje h3{
+  margin-bottom:10px;
+}
+
+.modal-mensaje h3.exito{
+  color:#16a34a;
+}
+
+.modal-mensaje h3.error{
+  color:#dc2626;
+}
+
+.modal-mensaje button{
+
+  margin-top:20px;
+  padding:12px 18px;
+  border:none;
+  border-radius:10px;
+  background:#2563eb;
+  color:white;
+  cursor:pointer;
+
+}
+
+/* confirmación botones */
+
+.acciones-modal{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin-top:20px;
+}

@@ -1,0 +1,35 @@
+/* You can add global styles to this file, and also import other style files */
+:root{
+
+    --sidebar:#0f172a;
+
+    --sidebar-hover:#1e293b;
+
+    --primary:#2563eb;
+
+    --primary-hover:#1d4ed8;
+
+    --background:#f1f5f9;
+
+    --card:#ffffff;
+
+    --text:#0f172a;
+
+    --text-light:#64748b;
+
+    --border:#e2e8f0;
+
+}
+body{
+
+    background:var(--background);
+
+    font-family:
+    'Segoe UI',
+    sans-serif;
+
+    margin:0;
+
+    padding:0;
+
+}

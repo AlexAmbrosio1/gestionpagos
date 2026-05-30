@@ -1,0 +1,61 @@
+<div class="login-container">
+
+  <div class="login-card">
+
+    <!-- HEADER -->
+    <div class="login-header">
+      <div class="avatar">👨‍💻</div>
+      <h2>Sistema de Gestión</h2>
+      <p>Inicia sesión para continuar</p>
+    </div>
+
+    <!-- ERROR -->
+    <div class="error-box" *ngIf="mensajeError">
+      {{ mensajeError }}
+    </div>
+
+    <form (ngSubmit)="iniciarSesion()">
+
+      <!-- USUARIO -->
+      <div class="form-group">
+        <label>Usuario</label>
+        <input
+          type="text"
+          placeholder="Ingrese usuario"
+          [(ngModel)]="UsuUsuario"
+          name="UsuUsuario">
+      </div>
+
+      <!-- PASSWORD -->
+      <div class="form-group">
+        <label>Contraseña</label>
+
+        <div class="password-wrapper">
+
+          <input
+            [type]="mostrarPassword ? 'text' : 'password'"
+            placeholder="Ingrese contraseña"
+            [(ngModel)]="UsuPassword"
+            name="UsuPassword">
+
+          <button type="button" class="btn-eye"
+                  (click)="mostrarPassword = !mostrarPassword">
+            {{ mostrarPassword ? '🙈' : '👁️' }}
+          </button>
+
+        </div>
+      </div>
+
+      <!-- BOTÓN -->
+      <button type="submit" [disabled]="cargando">
+
+        <span *ngIf="!cargando">Ingresar</span>
+        <span *ngIf="cargando">Validando...</span>
+
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
