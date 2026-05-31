@@ -403,11 +403,51 @@ private resetFormulario(): void {
 
 }
 exportarBoletaExcel(bol: any): void {
-  const ws = XLSX.utils.json_to_sheet([bol]); // Convertimos el objeto en una hoja
+
+  const datos = [
+    ['EMPLEASOFT S.A.C.'],
+    ['BOLETA DE PAGO'],
+    [''],
+    ['Código Boleta', bol.BolCodigo],
+    ['Fecha Emisión', new Date(bol.BolFechaGeneracion).toLocaleDateString('es-PE')],
+    [''],
+    ['DATOS DEL TRABAJADOR'],
+    ['Nombre', `${bol.EmpNombres} ${bol.EmpApellidoPaterno} ${bol.EmpApellidoMaterno || ''}`],
+    ['Área', bol.AreNombreArea],
+    [''],
+    ['DETALLE DE PAGO'],
+    ['Concepto', 'Monto (S/)'],
+    ['Salario Base', bol.BolSalarioUsado],
+    ['Gratificación', bol.BolMontoGratificacion],
+    ['TOTAL A PAGAR', bol.BolTotalPago],
+    [''],
+    ['Estado', bol.BolEstado]
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet(datos);
+
+  ws['!cols'] = [
+    { wch: 35 },
+    { wch: 25 }
+  ];
+
+  ws['!merges'] = [
+    { s: { r: 0, c: 0 }, e: { r: 0, c: 1 } },
+    { s: { r: 1, c: 0 }, e: { r: 1, c: 1 } }
+  ];
+
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'Boleta');
-  
-  XLSX.writeFile(wb, `Boleta_${bol.BolCodigo}.xlsx`);
+
+  XLSX.utils.book_append_sheet(
+    wb,
+    ws,
+    'Boleta'
+  );
+
+  XLSX.writeFile(
+    wb,
+    `Boleta_${bol.BolCodigo}.xlsx`
+  );
 }
 cerrarModalDniError(): void {
   this.mostrarModalDniError = false;
